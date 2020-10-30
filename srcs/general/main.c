@@ -40,7 +40,12 @@ int			check_exceptions(char *line, int type, int exit)
 	command_tab = ft_split(line, ';');
 	while (command_tab[++i])
 	{
-		if (is_double_redirect(command_tab[i]) == TRUE)
+		if (is_char_no_quot(command_tab[i], '|') == TRUE)
+		{
+			if ((exit = pipeline(command_tab[i])) == FAILURE)
+				break ;
+		}
+		else if (is_double_redirect(command_tab[i]) == TRUE)
 		{
 			if ((exit = double_redirect(command_tab[i])) == FAILURE)
 				break ;
@@ -53,11 +58,6 @@ int			check_exceptions(char *line, int type, int exit)
 		else if (is_redirect_inf(command_tab[i]) == TRUE)
 		{
 			if ((exit = redirect_inf(command_tab[i])) == FAILURE)
-				break ;
-		}
-		else if (is_char_no_quot(command_tab[i], '|') == TRUE)
-		{
-			if ((exit = pipeline(command_tab[i])) == FAILURE)
 				break ;
 		}
 		else

@@ -45,14 +45,14 @@ int			check_exceptions(char *line, int type, int exit)
 			if ((exit = pipeline(command_tab[i])) == FAILURE)
 				break ;
 		}
-		else if (is_double_redirect(command_tab[i]) == TRUE)
+		if (is_double_redirect(command_tab[i]) == TRUE)
 		{
 			if ((exit = double_redirect(command_tab[i])) == FAILURE)
 				break ;
 		}
-		else if (type == 0 && is_redirect_sup(command_tab[i]) == TRUE)
+		else if (type != 2 && is_redirect_sup(command_tab[i]) == TRUE)
 		{
-			if ((exit = redirect_sup(command_tab[i])) == FAILURE)
+			if ((exit = redirect_sup(command_tab[i], type)) == FAILURE)
 				break ;
 		}
 		else if (is_redirect_inf(command_tab[i]) == TRUE)

@@ -143,7 +143,7 @@ int		double_redirect(char *str)
 	}
 	while (fd[i])
 		i++;
-	i = threading(arg_tab, fd, i - 1);
+	i = threading(arg_tab, fd, i - 1, 1);
 	free_redirect_sup(arg_tab, fd);
 	return (i);
 }

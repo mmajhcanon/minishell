@@ -38,7 +38,7 @@ void	free_redirect_sup(char **arg_tab, int *fd)
 		free(fd);
 }
 
-int		threading(char **arg_tab, int *fd, int j)
+int		threading(char **arg_tab, int *fd, int j, int i)
 {
 	pid_t	child;
 
@@ -46,7 +46,7 @@ int		threading(char **arg_tab, int *fd, int j)
 	if (child == 0)
 	{
 		if (dup2(fd[j], 1) != FAILURE)
-			check_exceptions(arg_tab[0], 1, 0);
+			check_exceptions(arg_tab[0], i, 0);
 		return (FAILURE);
 	}
 	else if (child < 0)
@@ -106,7 +106,7 @@ char	*copy_string(char *str)
 	return (line);
 }
 
-int		redirect_sup(char *str)
+int		redirect_sup(char *str, int type)
 {
 	char	**arg_tab;
 	int		j;
@@ -132,8 +132,10 @@ int		redirect_sup(char *str)
 		j++;
 	if (fd[0] == 0)
 		i = check_exceptions(str, 1, 0);
+	else if (type == 0)
+		i = threading(arg_tab, fd, j - 1, 2);
 	else
-		i = threading(arg_tab, fd, j - 1);
+		i = check_exceptions(arg_tab[0], 2, 0);
 	free_redirect_sup(arg_tab, fd);
 	return (i);
 }

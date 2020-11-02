@@ -26,9 +26,11 @@ int		exec_program(char *path, char **args)
 		ft_putstr_fd("msh: failed to create a new thread\n", 2);
 		g_quit = 126;
 		signal(SIGINT, ctrlc_handler);
-		return (0);
+		return (-1);
 	}
+	//BUG
 	wait(&child);
+	//BUG
 	if (path)
 		free(path);
 	signal(SIGINT, ctrlc_handler);

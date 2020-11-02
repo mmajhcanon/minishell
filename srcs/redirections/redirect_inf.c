@@ -65,27 +65,72 @@ char	*word_inf(char *line, int *i)
 	return (str);
 }
 
-int		exec_inf(char **tab, char *command)
+int		thread_inf(int fd, char *command)
 {
-	int		i;
+	int		fdp[2];
+	pid_t	child;
 	int		j;
 	char	*str;
 
-	i = 0;
-	j = -1;
-	while (tab[i])
-		i++;
-	i--;
-	str = ft_strdup("cat ");
-	while (tab[i][++j])
-		str = ft_charjoin(str, tab[i][j]);
-	str = ft_charjoin(str, '|');
-	j = -1;
-	while (command[++j])
-		str = ft_charjoin(str, command[j]);
-	check_exceptions(str, 0, 0);
-	free(str);
+	j = 1;
+	str = NULL;
+	pipe(fdp);
+	if ((child = fork()) == -1)
+		return (-1);
+	if (child == 0)
+	{
+		dup2(fdp[1], 1);
+		close(fdp[0]);
+		close(fdp[1]);
+		while (j == 1)
+		{
+			j = get_next_line(fd, &str);
+			if (j != 0)
+			{
+				str = ft_charjoin(str, '\n');
+				ft_putstr_fd(str, 1);
+			}
+			free(str);
+		}
+		exit(0);
+	}
+	wait(&child);
+	if ((child = fork()) == -1)
+		return (-1);
+	if (child == 0)
+	{
+		dup2(fdp[0], 0);
+		close(fdp[0]);
+		close(fdp[1]);
+		ft_putstr("entering...\n\n\n\n");
+		check_exceptions(command, 0, 0);
+		ft_putstr("exiting...\n\n\n\n");
+		exit(g_quit);
+	}
+	wait(&child);
 	return (1);
+}
+
+int		exec_inf(char **tab, char *command)
+{
+	int		i;
+	int		fd;
+
+	i = -1;
+	while (tab[++i])
+	{
+		if (fd)
+			close(fd);
+		fd = open(tab[i], O_RDONLY);
+		if (fd == -1)
+		{
+			ft_putstr_fd("msh: no such file or directory: ", 2);
+			ft_putstr_fd(tab[i], 2);
+			ft_putchar_fd('\n', 2);
+			return (0);
+		}
+	}
+	return (thread_inf(fd, command));
 }
 
 int		redirect_inf(char *line)

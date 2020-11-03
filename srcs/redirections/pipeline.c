@@ -101,7 +101,6 @@ void	connect_pipe(char **job_tab, t_pipe p, int i)
 	dup2(p.pipefd[i + i + 1], 1);
 	close_fd(p.pipefd, p.nb_pipe * 2);
 	check_exceptions(job_tab[i], 0, 0);
-	// find_job(job_tab[i]);
 	exit(g_quit);
 }
 
@@ -113,8 +112,7 @@ int		exec_job(char **job_tab, int i, t_pipe p)
 	{
 		dup2(p.pipefd[1], 1);
 		close_fd(p.pipefd, p.nb_pipe * 2);
-	check_exceptions(job_tab[0], 0, 0);
-		// find_job(job_tab[0]);
+		check_exceptions(job_tab[0], 0, 0);
 		wait(NULL);
 		exit(g_quit);
 	}
@@ -122,8 +120,7 @@ int		exec_job(char **job_tab, int i, t_pipe p)
 	{
 		dup2(p.pipefd[p.nb_fd - 2], 0);
 		close_fd(p.pipefd, p.nb_pipe * 2);
-	check_exceptions(job_tab[p.nb_job - 1], 0, 0);
-		// find_job(job_tab[p.nb_job - 1]);
+		check_exceptions(job_tab[p.nb_job - 1], 0, 0);
 		exit(g_quit);
 	}
 	if (p.child[i] == 0)

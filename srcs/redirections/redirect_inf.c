@@ -65,47 +65,18 @@ char	*word_inf(char *line, int *i)
 	return (str);
 }
 
-int		thread_inf(int fd, char *command)
+int		thread_inf(int in, char *command)
 {
-	int		fdp[2];
 	pid_t	child;
-	int		j;
-	char	*str;
 
-	j = 1;
-	str = NULL;
-	pipe(fdp);
 	if ((child = fork()) == -1)
 		return (-1);
 	if (child == 0)
 	{
-		dup2(fdp[1], 1);
-		close(fdp[0]);
-		close(fdp[1]);
-		while (j == 1)
-		{
-			j = get_next_line(fd, &str);
-			if (j != 0)
-			{
-				str = ft_charjoin(str, '\n');
-				ft_putstr_fd(str, 1);
-			}
-			free(str);
-		}
-		exit(0);
-	}
-	wait(&child);
-	if ((child = fork()) == -1)
-		return (-1);
-	if (child == 0)
-	{
-		dup2(fdp[0], 0);
-		close(fdp[0]);
-		close(fdp[1]);
-		ft_putstr("entering...\n\n\n\n");
+		dup2(in, 0);
+		close(in);
 		check_exceptions(command, 0, 0);
-		ft_putstr("exiting...\n\n\n\n");
-		exit(g_quit);
+		exit(0);
 	}
 	wait(&child);
 	return (1);

@@ -63,8 +63,6 @@ int		ft_cd(char **tab)
 		ft_putchar_fd('\n', 2);
 		return (g_quit = 1);
 	}
-	while (tab[i][ft_strlen(tab[i]) - 1] == '/')
-		tab[i][ft_strlen(tab[i]) - 1] = '\0';
 	if (chdir(tab[i]) == -1)
 	{
 		print_cd_error(tab);

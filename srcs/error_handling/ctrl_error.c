@@ -22,8 +22,6 @@ void		ctrlc_handler(int signum)
 		print_prompt(0);
 		g_quit = 130;
 	}
-	else if (signum == SIGQUIT)
-		exit(FAILURE);
 }
 
 void		cancel_handler(int signum)

@@ -58,9 +58,7 @@ int		ft_cd(char **tab)
 		return (chdir(ft_search("HOME")) + 2);
 	else if (tab[i + 1] != 0)
 	{
-		ft_putstr_fd("cd: string not in pwd: ", 2);
-		ft_putstr_fd(tab[1], 2);
-		ft_putchar_fd('\n', 2);
+		ft_putstr_fd("msh: cd: too many arguments\n", 2);
 		return (g_quit = 1);
 	}
 	if (chdir(tab[i]) == -1)

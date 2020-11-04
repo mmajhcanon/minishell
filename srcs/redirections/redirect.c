@@ -15,11 +15,20 @@
 int		is_redirect_sup(char *command)
 {
 	int		i;
+	t_quote	quote;
 
+	quote.singl = 0;
+	quote.doubl = 0;
 	i = 0;
 	while (command[i])
 	{
-		if (is_char(command[i], ">") == TRUE)
+		if (command[i] == '\'')
+			quote.singl++;
+		if (command[i] == '\"')
+			quote.doubl++;
+		if (command[i] == '>' && is_even(quote.singl) == TRUE &&
+				is_even(quote.doubl) == TRUE &&
+				(i == 0 || (i >= 1 && command[i - 1] != '\\')))
 			return (TRUE);
 		i++;
 	}

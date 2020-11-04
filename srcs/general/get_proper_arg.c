@@ -68,7 +68,7 @@ void		replace_arg_cond(t_quote *q, int *i, char *arg, char **proper_arg)
 	// 	i[0]++;
 	// }
 	if (arg[i[0]] == '\\' && (is_even(q->singl) == 0 ||
-			(is_even(q->doubl) == 0 && arg[i[0] + 1] != '\"')))
+			(is_even(q->doubl) == 0 && arg[i[0] + 1] != '\"')) && arg[*i + 1] != '\\')
 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
 	else if (arg[i[0]] == '\\')
 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[++i[0]]);

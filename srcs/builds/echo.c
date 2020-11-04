@@ -17,6 +17,8 @@ int		echo_option(char *str)
 	int		i;
 
 	i = 1;
+	if (str == 0)
+		return (FALSE);
 	if (str[0] == '-')
 	{
 		while (str[i] == 'n')
@@ -36,7 +38,8 @@ int		ft_echo(char **tab)
 	{
 		while (echo_option(tab[option + 1]) == TRUE)
 			option++;
-		print_strs(tab + option + 1);
+		if (tab[option + 1] != 0)
+			print_strs(tab + option + 1);
 	}
 	if (option == 0)
 		ft_putchar_fd('\n', 1);

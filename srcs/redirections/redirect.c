@@ -12,29 +12,6 @@
 
 #include "minishell.h"
 
-int		is_redirect_sup(char *command)
-{
-	int		i;
-	t_quote	quote;
-
-	quote.singl = 0;
-	quote.doubl = 0;
-	i = 0;
-	while (command[i])
-	{
-		if (command[i] == '\'')
-			quote.singl++;
-		if (command[i] == '\"')
-			quote.doubl++;
-		if (command[i] == '>' && is_even(quote.singl) == TRUE &&
-				is_even(quote.doubl) == TRUE &&
-				(i == 0 || (i >= 1 && command[i - 1] != '\\')))
-			return (TRUE);
-		i++;
-	}
-	return (FALSE);
-}
-
 void	free_redirect_sup(char **arg_tab, int *fd)
 {
 	int		j;
@@ -71,48 +48,34 @@ int		threading(char **arg_tab, int *fd, int j, int i)
 int		*initialize_fd(char ***arg_tab, int i, int j)
 {
 	int		*fd;
-	char	*tmp;
-	int		k;
 
 	while ((*arg_tab)[i])
 		i++;
 	if (!(fd = (int *)malloc(sizeof(int) * i)))
 		return (NULL);
 	while (i-- > 1)
-	{
-		k = 0;
-		tmp = ft_strtrim((*arg_tab)[j + 1], " ");
-		while (tmp[k] != '\0' && tmp[k] != ' ')
-			k++;
-		if (tmp[k])
-		{
-			tmp[k] = '\0';
-			while (tmp[++k])
-				*arg_tab[0] = ft_charjoin((*arg_tab)[0], tmp[k]);
-		}
-		if (!(fd[j] = open(tmp, O_CREAT | O_RDWR | O_TRUNC, 0666)))
-		{
-			free(fd);
-			free(tmp);
+		if ((j = open_fd(arg_tab, fd, j)) == -1)
 			return (NULL);
-		}
-		j++;
-		free(tmp);
-	}
 	fd[j] = 0;
 	return (fd);
 }
 
-char	*copy_string(char *str)
+char	**copy_string(char *str)
 {
 	char	*line;
+	char	**arg_tab;
 	int		i;
 
 	i = -1;
 	line = ft_strdup(" ");
 	while (str[++i])
 		line = ft_charjoin(line, str[i]);
-	return (line);
+	arg_tab = ft_split(line, '>');
+	free(line);
+	arg_tab += 8;
+	arg_tab = get_proper_arg(arg_tab);
+	arg_tab -= 8;
+	return (arg_tab);
 }
 
 int		redirect_sup(char *str, int type)
@@ -121,17 +84,11 @@ int		redirect_sup(char *str, int type)
 	int		j;
 	int		*fd;
 	int		i;
-	char	*line;
 
 	j = 0;
 	i = 1;
-	line = copy_string(str);
-	arg_tab = ft_split(line, '>');
-	free(line);
-	arg_tab += 8;
-	arg_tab = get_proper_arg(arg_tab);
-	arg_tab -= 8;
-	if ((fd = initialize_fd(&arg_tab, 0, i - 1)) == NULL)
+	arg_tab = copy_string(str);
+	if ((fd = initialize_fd(&arg_tab, 0, 0)) == NULL)
 	{
 		free_tab(arg_tab);
 		g_quit = 126;

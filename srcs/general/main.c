@@ -41,30 +41,17 @@ int			check_exceptions(char *line, int type, int exit)
 	while (command_tab[++i])
 	{
 		if (is_char_no_quot(command_tab[i], '|') == TRUE)
-		{
-			if ((exit = pipeline(command_tab[i])) == FAILURE)
-				break ;
-		}
+			exit = pipeline(command_tab[i]);
 		else if (is_double_redirect(command_tab[i]) == TRUE)
-		{
-			if ((exit = double_redirect(command_tab[i])) == FAILURE)
-				break ;
-		}
-		else if (type != 2 && is_redirect_sup(command_tab[i]) == TRUE)
-		{
-			if ((exit = redirect_sup(command_tab[i], type)) == FAILURE)
-				break ;
-		}
-		else if (is_redirect_inf(command_tab[i]) == TRUE)
-		{
-			if ((exit = redirect_inf(command_tab[i])) == FAILURE)
-				break ;
-		}
+			exit = double_redirect(command_tab[i]);
+		else if (type != 2 && is_single_redirect(command_tab[i], '>') == TRUE)
+			exit = redirect_sup(command_tab[i], type);
+		else if (is_single_redirect(command_tab[i], '<') == TRUE)
+			exit = redirect_inf(command_tab[i]);
 		else
-		{
-			if ((exit = find_job(command_tab[i])) == FAILURE)
-				break ;
-		}
+			exit = find_job(command_tab[i]);
+		if (exit == FAILURE)
+			break ;
 	}
 	free_tab(command_tab);
 	return (exit);

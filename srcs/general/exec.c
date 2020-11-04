@@ -23,16 +23,15 @@ int		exec_program(char *path, char **args)
 		execve(path, args, g_env);
 		exit(127);
 	}
-	else if (child < 0)
-	{
-		free(path);
-		ft_putstr_fd("msh: failed to create a new thread\n", 2);
-		g_quit = 126;
-		return (-1);
-	}
-	wait(&child);
 	if (path)
 		free(path);
+	if (child < 0)
+	{
+		ft_putstr_fd("msh: failed to create a new thread\n", 2);
+		g_quit = 126;
+		return (1);
+	}
+	wait(&child);
 	signal(SIGINT, ctrlc_handler);
 	if (child != 0)
 	{
@@ -115,7 +114,8 @@ int		find_job(char *line)
 
 	arg_tab = ft_split(line, ' ');
 	arg_tab = get_proper_arg(arg_tab);
-	if ((is_builtin = compute_line(arg_tab)) > 0 || (is_bin = check_bins(arg_tab)) > 0)
+	if ((is_builtin = compute_line(arg_tab)) > 0 ||
+		(is_bin = check_bins(arg_tab)) > 0)
 	{
 		free_tab(arg_tab);
 		if (is_builtin > 0)

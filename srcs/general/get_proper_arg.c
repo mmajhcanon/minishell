@@ -12,19 +12,6 @@
 
 #include "minishell.h"
 
-int			special_var(char **proper_arg)
-{
-	char	*tmp;
-	char	*tmp2;
-
-	tmp2 = ft_itoa(g_quit);
-	tmp = ft_strjoin(*proper_arg, tmp2);
-	free(tmp2);
-	free(*proper_arg);
-	*proper_arg = tmp;
-	return (SUCCESS);
-}
-
 int			get_ve_value(char **proper_arg, char *arg, int i)
 {
 	char	*str_name;
@@ -65,13 +52,8 @@ int			pass_ve(char *arg, int i)
 
 void		replace_arg_cond(t_quote *q, int *i, char *arg, char **proper_arg)
 {
-	// if (arg[i[0]] == '\\' && (is_even(q->singl) == 0 || is_even(q->doubl) == 0))
-	// {
-	// 	proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
-	// 	i[0]++;
-	// }
 	if (arg[i[0]] == '\\' && (is_even(q->singl) == 0 ||
-			(is_even(q->doubl) == 0 && arg[i[0] + 1] != '\"')) && arg[*i + 1] != '\\')
+	(is_even(q->doubl) == 0 && arg[i[0] + 1] != '\"')) && arg[*i + 1] != '\\')
 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
 	else if (arg[i[0]] == '\\')
 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[++i[0]]);

@@ -12,29 +12,6 @@
 
 #include "minishell.h"
 
-int		is_double_redirect(char *command)
-{
-	int		i;
-	t_quote	quote;
-
-	quote.singl = 0;
-	quote.doubl = 0;
-	i = 0;
-	while (command[i])
-	{
-		if (command[i] == '\'')
-			quote.singl++;
-		if (command[i] == '\"')
-			quote.doubl++;
-		if (command[i] == '>' && command[i + 1] == '>' &&
-		is_even(quote.singl) == TRUE && is_even(quote.doubl) == TRUE &&
-		(i == 0 || (i >= 1 && command[i - 1] != '\\')))
-			return (TRUE);
-		i++;
-	}
-	return (FALSE);
-}
-
 int		redir_double_count(char *line)
 {
 	int		i;
@@ -94,11 +71,9 @@ char	**copy_stringd(char *str)
 	char	*line;
 	char	**arg_tab;
 	int		i;
-	int		j;
 	t_quote	quote;
 
 	i = -1;
-	j = 1;
 	quote.doubl = 0;
 	quote.singl = 0;
 	line = ft_strdup(" ");
@@ -107,23 +82,7 @@ char	**copy_stringd(char *str)
 	arg_tab[0] = ft_strdup("");
 	while (str[++i])
 		line = ft_charjoin(line, str[i]);
-	i = -1;
-	while (line[++i])
-	{
-		if (line[i] == '\'')
-			quote.singl++;
-		if (line[i] == '\"')
-			quote.doubl++;
-		if (line[i] == '>' && line[i + 1] == '>' &&
-		is_even(quote.singl) == TRUE && is_even(quote.doubl) == TRUE &&
-		(i == 0 || (i >= 1 && line[i - 1] != '\\')))
-			arg_tab[j++] = word_double(line, &i);
-		arg_tab[0] = ft_charjoin(arg_tab[0], line[i]);
-		if (line[i] == 0)
-			break ;
-	}
-	free(line);
-	arg_tab[j] = 0;
+	arg_tab = tab_creator_double(arg_tab, line, quote);
 	return (arg_tab);
 }
 

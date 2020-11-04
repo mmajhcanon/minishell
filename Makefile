@@ -20,25 +20,31 @@ OBJS_REDIR		=	${SRCS_REDIR:.c=.o}
 
 
 #====================================SRCS=======================================
-SRCS_GNL		=	srcs/gnl/get_next_line.c		\
+SRCS_GNL		=	srcs/gnl/get_next_line.c			\
 					srcs/gnl/get_next_line_utils.c
-SRCS_GEN		=	srcs/general/main.c				\
-					srcs/general/exec.c				\
-					srcs/general/functions.c		\
-					srcs/general/other_functions.c  \
+SRCS_GEN		=	srcs/general/main.c					\
+					srcs/general/main_utils.c			\
+					srcs/general/exec.c					\
+					srcs/general/functions.c			\
+					srcs/general/other_functions.c 		\
 					srcs/general/get_proper_arg.c
-SRCS_BUILD		=	srcs/builds/echo.c				\
-					srcs/builds/env.c				\
-					srcs/builds/direction.c			\
-					srcs/builds/export.c			\
-					srcs/builds/unset.c				\
+SRCS_BUILD		=	srcs/builds/echo.c					\
+					srcs/builds/env.c					\
+					srcs/builds/direction.c				\
+					srcs/builds/export.c				\
+					srcs/builds/export_utils.c			\
+					srcs/builds/export_others.c			\
+					srcs/builds/unset.c					\
 					srcs/builds/exit.c
 SRCS_ERR		=	srcs/error_handling/parsing_error.c \
+					srcs/error_handling/error_utils.c	\
 					srcs/error_handling/ctrl_error.c
-SRCS_REDIR		=	srcs/redirections/redirect.c	\
+SRCS_REDIR		=	srcs/redirections/redirect.c		\
 					srcs/redirections/redirect_inf.c	\
 					srcs/redirections/double_redir.c	\
-					srcs/redirections/pipeline.c
+					srcs/redirections/redir_utils.c		\
+					srcs/redirections/pipeline.c		\
+					srcs/redirections/pipeline_utils.c
 
 
 #=============================FLAGS AND COMPILERS===============================

@@ -24,8 +24,7 @@ char	*ft_search(char *word)
 		while (g_env[i][j] == word[j])
 		{
 			j++;
-			if (g_env[i][j] == '=' && (is_char(word[j], "/") ||
-				word[j] == '\0'))
+			if (g_env[i][j] == '=' && (word[j] == '/' || word[j] == '\0'))
 				return (g_env[i] + j + 1);
 		}
 		i++;

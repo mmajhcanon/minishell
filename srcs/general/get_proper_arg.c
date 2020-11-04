@@ -29,10 +29,11 @@ int			get_ve_value(char **proper_arg, char *arg, int i)
 {
 	char	*str_name;
 	char	*tmp;
+	char	*save;
 	int		j;
 
 	j = 0;
-	if (arg[i] == '?') // faut return direct ?
+	if (arg[i] == '?')
 		return (special_var(proper_arg));
 	if (ft_isalnum(arg[i]) == FALSE)
 	{
@@ -43,10 +44,12 @@ int			get_ve_value(char **proper_arg, char *arg, int i)
 		return (FAILURE);
 	while (arg[i] && is_char(arg[i], "\\\'\"$ ") == FALSE)
 		str_name[j++] = arg[i++];
+	str_name[j] = '\0';
 	tmp = ft_strjoin(*proper_arg, ft_search(str_name));
 	free(str_name);
-	free(*proper_arg);
+	save = *proper_arg;
 	*proper_arg = tmp;
+	free(save);
 	return (SUCCESS);
 }
 

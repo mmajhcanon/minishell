@@ -98,6 +98,7 @@ int		exec_inf(char **tab, char *command)
 			ft_putstr_fd("msh: no such file or directory: ", 2);
 			ft_putstr_fd(tab[i], 2);
 			ft_putchar_fd('\n', 2);
+			g_quit = 1;
 			return (0);
 		}
 	}

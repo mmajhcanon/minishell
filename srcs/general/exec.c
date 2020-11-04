@@ -19,22 +19,27 @@ int		exec_program(char *path, char **args)
 	child = fork();
 	signal(SIGINT, cancel_handler);
 	if (child == 0)
+	{
 		execve(path, args, g_env);
+		exit(127);
+	}
 	else if (child < 0)
 	{
 		free(path);
 		ft_putstr_fd("msh: failed to create a new thread\n", 2);
 		g_quit = 126;
-		signal(SIGINT, ctrlc_handler);
 		return (-1);
 	}
-	//BUG
 	wait(&child);
-	//BUG
 	if (path)
 		free(path);
 	signal(SIGINT, ctrlc_handler);
-	return (1);
+	if (child != 0)
+	{
+		g_quit = (int)child / 256;
+		return (1);
+	}
+	return (2);
 }
 
 int		is_executable(char *bin_path, struct stat f, char **arg_tab)
@@ -105,16 +110,17 @@ int		is_correct_file(char **arg_tab)
 int		find_job(char *line)
 {
 	int			is_builtin;
+	int			is_bin;
 	char		**arg_tab;
 
 	arg_tab = ft_split(line, ' ');
 	arg_tab = get_proper_arg(arg_tab);
-	if ((is_builtin = compute_line(arg_tab)) > 0 || check_bins(arg_tab))
+	if ((is_builtin = compute_line(arg_tab)) > 0 || (is_bin = check_bins(arg_tab)) > 0)
 	{
 		free_tab(arg_tab);
 		if (is_builtin > 0)
 			return (is_builtin - 1);
-		return (1);
+		return (is_bin - 1);
 	}
 	if (is_builtin < 0)
 	{

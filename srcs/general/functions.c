@@ -31,6 +31,8 @@ void		print_prompt(int error)
 		ft_putstr(BBLUE);
 		g_quit = 0;
 	}
+	else
+		ft_putstr(BRED);
 	if (g_pipe == 1)
 		g_pipe = 0;
 	ft_pwd(NULL, 0);

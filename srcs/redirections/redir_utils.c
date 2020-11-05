@@ -15,11 +15,13 @@
 int		is_double_redirect(char *command)
 {
 	int		i;
+	int		j;
 	t_quote	quote;
 
 	quote.singl = 0;
 	quote.doubl = 0;
 	i = 0;
+	j = 0;
 	while (command[i])
 	{
 		if (command[i] == '\'')
@@ -29,20 +31,22 @@ int		is_double_redirect(char *command)
 		if (command[i] == '>' && command[i + 1] == '>' &&
 		is_even(quote.singl) == TRUE && is_even(quote.doubl) == TRUE &&
 		(i == 0 || (i >= 1 && command[i - 1] != '\\')))
-			return (TRUE);
+			j = i;
 		i++;
 	}
-	return (FALSE);
+	return (j);
 }
 
 int		is_single_redirect(char *command, char c)
 {
 	int		i;
+	int		j;
 	t_quote	quote;
 
 	quote.singl = 0;
 	quote.doubl = 0;
 	i = 0;
+	j = 0;
 	while (command[i])
 	{
 		if (command[i] == '\'')
@@ -50,12 +54,12 @@ int		is_single_redirect(char *command, char c)
 		if (command[i] == '\"')
 			quote.doubl++;
 		if (command[i] == c && is_even(quote.singl) == TRUE &&
-				is_even(quote.doubl) == TRUE &&
+				is_even(quote.doubl) == TRUE && command[i + 1] != c &&
 				(i == 0 || (i >= 1 && command[i - 1] != '\\')))
-			return (TRUE);
+			j = i;
 		i++;
 	}
-	return (FALSE);
+	return (j);
 }
 
 int		open_fd(char ***arg_tab, int *fd, int j)

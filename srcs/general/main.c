@@ -42,11 +42,11 @@ int			check_exceptions(char *line, int type, int exit)
 	{
 		if (is_char_no_quot(command_tab[i], '|') == TRUE)
 			exit = pipeline(command_tab[i]);
-		else if (is_double_redirect(command_tab[i]) == TRUE)
+		else if (is_double_redirect(command_tab[i]) > is_single_redirect(command_tab[i], '>'))
 			exit = double_redirect(command_tab[i]);
-		else if (type != 2 && is_single_redirect(command_tab[i], '>') == TRUE)
+		else if (type != 2 && is_single_redirect(command_tab[i], '>') > 0)
 			exit = redirect_sup(command_tab[i], type);
-		else if (is_single_redirect(command_tab[i], '<') == TRUE)
+		else if (is_single_redirect(command_tab[i], '<') > 0)
 			exit = redirect_inf(command_tab[i]);
 		else
 			exit = find_job(command_tab[i]);
@@ -77,7 +77,7 @@ void		main_loop(void)
 		{
 			ft_putstr_fd("msh: error: incorrect syntax\n", 2);
 			exit = 0;
-			g_quit = 1;
+			g_quit = 2;
 		}
 		free(line);
 	}

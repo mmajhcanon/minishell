@@ -14,7 +14,6 @@
 
 void		ctrlc_handler(int signum)
 {
-	ft_putstr_fd("\b\b  \b\b", 2);
 	if (signum == SIGINT)
 	{
 		signal(SIGINT, ctrlc_handler);
@@ -22,6 +21,8 @@ void		ctrlc_handler(int signum)
 		print_prompt(0);
 		g_quit = 130;
 	}
+	if (signum == SIGQUIT)
+		ft_putstr_fd("\b\b  \b\b", 2);
 }
 
 void		cancel_handler(int signum)
@@ -29,6 +30,7 @@ void		cancel_handler(int signum)
 	if (signum == SIGINT)
 	{
 		signal(SIGINT, cancel_handler);
+		ft_putchar_fd('\n', 2);
 		g_quit = 130;
 	}
 	else if (signum == SIGQUIT)

@@ -126,6 +126,5 @@ int		fill_in(t_str **str, char *buffer, int fd)
 	}
 	if (bytes_read <= -1)
 		return ((bytes_read < 0) ? -1 : 0);
-	ft_putstr_fd("ctrld detected: exit\n", 2);
 	exit(1);
 }

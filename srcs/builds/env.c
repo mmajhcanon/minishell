@@ -29,8 +29,7 @@ char	*ft_search(char *word)
 		}
 		i++;
 	}
-	word[0] = '\0';
-	return (word);
+	return (NULL);
 }
 
 int		ft_env(char **tab)

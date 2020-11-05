@@ -17,6 +17,7 @@ int		exec_program(char *path, char **args)
 	pid_t	child;
 
 	child = fork();
+	g_quit = 0;
 	signal(SIGINT, cancel_handler);
 	if (child == 0)
 	{
@@ -33,11 +34,10 @@ int		exec_program(char *path, char **args)
 	}
 	wait(&child);
 	signal(SIGINT, ctrlc_handler);
-	if (child != 0)
-	{
+	if (child != 0 && g_quit == 0)
 		g_quit = (int)child / 256;
+	if (child != 0)
 		return (1);
-	}
 	return (2);
 }
 
@@ -84,7 +84,6 @@ int		check_bins(char **arg_tab)
 			return (is_executable(bin_path, f, arg_tab));
 		}
 	}
-	free_tab(path);
 	return (0);
 }
 
@@ -97,7 +96,7 @@ int		is_correct_file(char **arg_tab)
 		if (f.st_mode & S_IFDIR)
 			return (ft_cd(arg_tab) - 1);
 		else if (f.st_mode & S_IXUSR)
-			return (exec_program(ft_strdup(arg_tab[0]), arg_tab));
+			return (exec_program(ft_strdup(arg_tab[0]), arg_tab) - 1);
 	}
 	ft_putstr_fd("msh: command not found: ", 2);
 	ft_putstr_fd(arg_tab[0], 2);

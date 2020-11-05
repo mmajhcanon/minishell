@@ -33,8 +33,6 @@ int		ft_exit(char **arg_tab)
 	i = -1;
 	if (g_pipe == 0)
 		ft_putstr("exit\n");
-	if (arg_tab[1] != 0 && arg_tab[2] != 0)
-		return (exit_error2());
 	while (arg_tab[1] && arg_tab[1][++i])
 		if (ft_isdigit(arg_tab[1][i]) == FALSE &&
 		arg_tab[1][i] != '-' && arg_tab[1][i] != '+')
@@ -45,6 +43,8 @@ int		ft_exit(char **arg_tab)
 		g_quit = 1;
 		return (-1);
 	}
+	if (arg_tab[1] != 0 && arg_tab[2] != 0)
+		return (exit_error2());
 	if (arg_tab[1])
 		g_quit = ft_atoi(arg_tab[1]);
 	else

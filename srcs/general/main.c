@@ -42,7 +42,8 @@ int			check_exceptions(char *line, int type, int exit)
 	{
 		if (is_char_no_quot(command_tab[i], '|') == TRUE)
 			exit = pipeline(command_tab[i]);
-		else if (is_double_redirect(command_tab[i]) > is_single_redirect(command_tab[i], '>'))
+		else if (is_double_redirect(command_tab[i]) >
+				is_single_redirect(command_tab[i], '>'))
 			exit = double_redirect(command_tab[i]);
 		else if (type != 2 && is_single_redirect(command_tab[i], '>') > 0)
 			exit = redirect_sup(command_tab[i], type);
@@ -65,7 +66,6 @@ int			main_loop(void)
 	exit = 1;
 	while (1)
 	{
-		main_handler();
 		print_prompt(exit);
 		get_next_line(1, &line);
 		if (parsing_error(line) != FAILURE)
@@ -95,6 +95,7 @@ int			main(int ac, char **av, char **envp)
 		g_quit = 0;
 		g_pipe = 0;
 		g_env = ft_tabstrdup(envp);
+		main_handler();
 		return (main_loop());
 	}
 	ft_putstr_fd("too many arguments\n", 2);

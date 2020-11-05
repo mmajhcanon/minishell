@@ -114,21 +114,18 @@ int		fill_in(t_str **str, char *buffer, int fd)
 			|| !(newline->line = ft_strdup(buffer)))
 			return (-2);
 		newline->next = NULL;
-		if (!*str)
+		if (!(*str) && (bytes_read = -1))
 			*str = newline;
-		else
-		{
-			elem = *str;
-			while (elem->next)
-				elem = elem->next;
-			elem->next = newline;
-		}
+		if (bytes_read == -1)
+			return (1);
+		elem = *str;
+		while (elem->next)
+			elem = elem->next;
+		elem->next = newline;
 		return (1);
 	}
-	if (bytes_read == 0 && buffer[0] == '\0')
-	{
-		ft_putstr_fd("ctrld detected : exit\n", 1);
-		exit(1);
-	}
-	return ((bytes_read < 0) ? -1 : 0);
+	if (bytes_read <= -1)
+		return ((bytes_read < 0) ? -1 : 0);
+	ft_putstr_fd("ctrld detected: exit\n", 2);
+	exit(1);
 }

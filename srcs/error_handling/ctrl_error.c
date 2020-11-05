@@ -45,7 +45,6 @@ void		cancel_handler(int signum)
 	}
 	else if (signum == SIGQUIT)
 	{
-		ft_putstr_fd("Quitted: (core dumped)\n", 2);
 		g_quit = 131;
 	}
 }

@@ -50,14 +50,14 @@ int			check_exceptions(char *line, int type, int exit)
 			exit = redirect_inf(command_tab[i]);
 		else
 			exit = find_job(command_tab[i]);
-		if (exit == FAILURE)
+		if (exit <= FAILURE)
 			break ;
 	}
 	free_tab(command_tab);
 	return (exit);
 }
 
-void		main_loop(void)
+int			main_loop(void)
 {
 	char	*line;
 	int		exit;
@@ -84,6 +84,7 @@ void		main_loop(void)
 	free_tab(g_env);
 	free(line);
 	get_next_line(-1, &line);
+	return (g_quit);
 }
 
 int			main(int ac, char **av, char **envp)
@@ -94,8 +95,7 @@ int			main(int ac, char **av, char **envp)
 		g_quit = 0;
 		g_pipe = 0;
 		g_env = ft_tabstrdup(envp);
-		main_loop();
-		return (0);
+		return (main_loop());
 	}
 	ft_putstr_fd("too many arguments\n", 2);
 	return (-1);

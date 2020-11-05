@@ -14,19 +14,19 @@
 
 int			compute_line(char **arg_tab)
 {
-	if (strcmp(arg_tab[0], "echo") == 0)
+	if (ft_strcmp(arg_tab[0], "echo") == 0)
 		return (ft_echo(arg_tab));
-	else if (strcmp(arg_tab[0], "pwd") == 0)
+	else if (ft_strcmp(arg_tab[0], "pwd") == 0)
 		return (ft_pwd(arg_tab[1], 1));
-	else if (strcmp(arg_tab[0], "env") == 0)
+	else if (ft_strcmp(arg_tab[0], "env") == 0)
 		return (ft_env(arg_tab));
-	else if (strcmp(arg_tab[0], "cd") == 0)
+	else if (ft_strcmp(arg_tab[0], "cd") == 0)
 		return (ft_cd(arg_tab));
-	else if (strcmp(arg_tab[0], "export") == 0)
+	else if (ft_strcmp(arg_tab[0], "export") == 0)
 		return (ft_export(arg_tab, &g_env));
-	else if (strcmp(arg_tab[0], "unset") == 0)
+	else if (ft_strcmp(arg_tab[0], "unset") == 0)
 		return (ft_unset(arg_tab, &g_env));
-	else if (strcmp(arg_tab[0], "exit") == 0)
+	else if (ft_strcmp(arg_tab[0], "exit") == 0)
 		return (ft_exit(arg_tab));
 	return (0);
 }

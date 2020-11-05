@@ -113,6 +113,8 @@ int		find_job(char *line)
 
 	arg_tab = ft_split(line, ' ');
 	arg_tab = get_proper_arg(arg_tab);
+	if (arg_tab[0] == NULL)
+		return (1);
 	if ((is_builtin = compute_line(arg_tab)) > 0 ||
 		(is_bin = check_bins(arg_tab)) > 0)
 	{

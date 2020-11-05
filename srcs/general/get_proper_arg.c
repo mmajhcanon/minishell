@@ -64,7 +64,7 @@ void		replace_arg_cond(t_quote *q, int *i, char *arg, char **proper_arg)
 		q->singl++;
 	else if (arg[i[0]] == '\"' && is_even(q->singl))
 		q->doubl++;
-	else if (arg[i[0]] == '$' && is_even(q->singl))
+	else if (arg[i[0]] == '$' && is_even(q->singl) && arg[(*i) + 1])
 	{
 		get_ve_value(proper_arg, arg, i[0] + 1, q);
 		i[0] = pass_ve(arg, i[0]) - 1;

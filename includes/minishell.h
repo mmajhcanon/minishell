@@ -65,6 +65,8 @@ int				ft_unset(char **arg_tab, char ***env);
 int				ft_exit(char **arg_tab);
 int				is_pipe(char *command);
 int				pipeline(char *command);
+void			main_handler(void);
+void			exec_handler(void);
 void			print_strs(char **tabstr);
 void			free_tab(char **tab);
 void			print_env_var(char *line, int *i);

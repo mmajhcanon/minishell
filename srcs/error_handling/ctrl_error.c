@@ -10,7 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
+
+void		main_handler(void)
+{
+	signal(SIGINT, ctrlc_handler);
+	signal(SIGQUIT, ctrlc_handler);
+}
+
+void		exec_handler(void)
+{
+	signal(SIGINT, cancel_handler);
+	signal(SIGQUIT, cancel_handler);
+}
 
 void		ctrlc_handler(int signum)
 {

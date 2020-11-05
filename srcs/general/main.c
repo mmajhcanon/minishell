@@ -65,7 +65,7 @@ void		main_loop(void)
 	exit = 1;
 	while (1)
 	{
-		signal(SIGINT, ctrlc_handler);
+		main_handler();
 		print_prompt(exit);
 		get_next_line(1, &line);
 		if (parsing_error(line) != FAILURE)
@@ -93,7 +93,6 @@ int			main(int ac, char **av, char **envp)
 	{
 		g_quit = 0;
 		g_pipe = 0;
-		signal(SIGQUIT, ctrlc_handler);
 		g_env = ft_tabstrdup(envp);
 		main_loop();
 		return (0);

@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int			get_ve_value(char **proper_arg, char *arg, int i)
+int			get_ve_value(char **proper_arg, char *arg, int i, t_quote *q)
 {
 	char	*str_name;
 	char	*tmp;
@@ -22,7 +22,7 @@ int			get_ve_value(char **proper_arg, char *arg, int i)
 	j = 0;
 	if (arg[i] == '?')
 		return (special_var(proper_arg));
-	if (ft_isalnum(arg[i]) == FALSE)
+	if (ft_isalnum(arg[i]) == FALSE && !is_even(q->doubl))
 	{
 		proper_arg[0] = ft_charjoin(proper_arg[0], '$');
 		return (SUCCESS);
@@ -55,7 +55,7 @@ void		replace_arg_cond(t_quote *q, int *i, char *arg, char **proper_arg)
 	if (arg[i[0]] == '\\' && is_even(q->singl) == FALSE)
 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
 	else if (arg[i[0]] == '\\' && (is_even(q->singl) == FALSE ||
-	(is_even(q->doubl) == 0 && arg[i[0] + 1] != '\"')) && arg[*i + 1] != '\\')
+	(is_even(q->doubl) == 0 && is_char(arg[i[0] + 1], "\""))) && arg[*i + 1] != '\\')
 	{
 		// printf("char1 = %c\n", arg[i[0]]);
 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
@@ -71,7 +71,7 @@ void		replace_arg_cond(t_quote *q, int *i, char *arg, char **proper_arg)
 		q->doubl++;
 	else if (arg[i[0]] == '$' && is_even(q->singl))
 	{
-		get_ve_value(proper_arg, arg, i[0] + 1);
+		get_ve_value(proper_arg, arg, i[0] + 1, q);
 		i[0] = pass_ve(arg, i[0]) - 1;
 	}
 	else

@@ -52,11 +52,19 @@ int			pass_ve(char *arg, int i)
 
 void		replace_arg_cond(t_quote *q, int *i, char *arg, char **proper_arg)
 {
-	if (arg[i[0]] == '\\' && (is_even(q->singl) == 0 ||
-	(is_even(q->doubl) == 0 && arg[i[0] + 1] != '\"')) && arg[*i + 1] != '\\')
+	if (arg[i[0]] == '\\' && is_even(q->singl) == FALSE)
 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
+	else if (arg[i[0]] == '\\' && (is_even(q->singl) == FALSE ||
+	(is_even(q->doubl) == 0 && arg[i[0] + 1] != '\"')) && arg[*i + 1] != '\\')
+	{
+		// printf("char1 = %c\n", arg[i[0]]);
+		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
+	}
 	else if (arg[i[0]] == '\\')
+	{
+		// printf("char2 = %c\n", arg[i[0]]);
 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[++i[0]]);
+	}
 	else if (arg[i[0]] == '\'' && is_even(q->doubl))
 		q->singl++;
 	else if (arg[i[0]] == '\"' && is_even(q->singl))

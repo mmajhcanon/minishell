@@ -12,9 +12,42 @@
 
 #include "minishell.h"
 
+// void	quote_condition(t_quote *q, int *i, char **quoted_line, char *line)
+// {
+// 	if (line[i[0]] == '\"' && q->singl % 2 == 0 && line[i[0] - 1] != '\\')
+// 	{
+// 		q->doubl++;
+// 		quoted_line[0][i[0]++] = '0';
+// 	}
+// 	else if ((line[i[0]] == '\'' && q->doubl % 2 == 0 && line[i[0] - 1] != '\\')
+// 	|| (line[i[0]] == '\'' && q->doubl % 2 == 0 && q->singl % 2 == 1))
+// 	{
+// 		q->singl++;
+// 		quoted_line[0][i[0]++] = '0';
+// 	}
+// 	else if ((q->singl % 2 == 1 || q->doubl % 2 == 1))
+// 		quoted_line[0][i[0]++] = '1';
+// 	else if (line[i[0]] == '\\' && line[i[0] + 1] != '\0'
+// 	&& (q->singl % 2 == 0 && q->doubl % 2 == 0))
+// 	{
+// 		quoted_line[0][i[0]] = '0';
+// 		quoted_line[0][i[0] + 1] = '1';
+// 		i[0] = i[0] + 2;
+// 	}
+// 	else
+// 		quoted_line[0][i[0]++] = '0';
+// }
+
 void	quote_condition(t_quote *q, int *i, char **quoted_line, char *line)
 {
-	if (line[i[0]] == '\"' && q->singl % 2 == 0 && line[i[0] - 1] != '\\')
+	if (line[i[0]] == '\\' && line[i[0] + 1] != '\0' && is_even(q->doubl) == FALSE)
+	{
+		quoted_line[0][i[0]++] = '1';
+		if (line[i[0]] == '\0')
+			return ;
+		quoted_line[0][i[0]++] = '1';
+	}
+	else if (line[i[0]] == '\"' && q->singl % 2 == 0)
 	{
 		q->doubl++;
 		quoted_line[0][i[0]++] = '0';
@@ -51,9 +84,13 @@ int		count_quote(char *line, char **quoted_line)
 		quote_condition(&q, &i, quoted_line, line);
 	}
 	quoted_line[0][i] = '\0';
-	if (is_char(line[i - 1], "\\") == TRUE)
-		return (FAILURE);
+	// printf("qline = '%s'\n", quoted_line[0]);
+	// printf("_line = '%s'\n", line);
 	if (q.singl % 2 == 1 || q.doubl % 2 == 1)
+		return (FAILURE);
+	// printf("_line[i - 1] = '%c'\n", line[i - 1]);
+	// printf("qline[i - 1] = '%c'\n", quoted_line[0][i - 1]);
+	if (line[i - 1] == '\\' && quoted_line[0][i - 1] == '0')
 		return (FAILURE);
 	return (SUCCESS);
 }

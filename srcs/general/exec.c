@@ -19,6 +19,7 @@ int		exec_program(char *path, char **args)
 	child = fork();
 	g_quit = 0;
 	signal(SIGINT, cancel_handler);
+	signal(SIGQUIT, cancel_handler);
 	if (child == 0)
 	{
 		execve(path, args, g_env);
@@ -34,6 +35,7 @@ int		exec_program(char *path, char **args)
 	}
 	wait(&child);
 	signal(SIGINT, ctrlc_handler);
+	signal(SIGQUIT, ctrlc_handler);
 	if (child != 0 && g_quit == 0)
 		g_quit = (int)child / 256;
 	if (child != 0)

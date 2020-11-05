@@ -16,7 +16,6 @@ void		ctrlc_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		signal(SIGINT, ctrlc_handler);
 		ft_putchar_fd('\n', 2);
 		print_prompt(0);
 		g_quit = 130;
@@ -29,10 +28,12 @@ void		cancel_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		signal(SIGINT, cancel_handler);
 		ft_putchar_fd('\n', 2);
 		g_quit = 130;
 	}
 	else if (signum == SIGQUIT)
-		exit(FAILURE);
+	{
+		ft_putstr_fd("Quitted: (core dumped)\n", 2);
+		g_quit = 131;
+	}
 }

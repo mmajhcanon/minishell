@@ -70,7 +70,7 @@ void		main_loop(void)
 		get_next_line(1, &line);
 		if (parsing_error(line) != FAILURE)
 		{
-			if ((exit = check_exceptions(line, 0, 0)) <= FAILURE)
+			if ((exit = check_exceptions(line, 0, 1)) <= FAILURE)
 				break ;
 		}
 		else

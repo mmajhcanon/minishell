@@ -22,7 +22,9 @@ int			get_ve_value(char **proper_arg, char *arg, int i, t_quote *q)
 	j = 0;
 	if (arg[i] == '?')
 		return (special_var(proper_arg));
-	if (ft_isalnum(arg[i]) == FALSE && !is_even(q->doubl))
+	if (arg[i] == '\'' && is_even(q->doubl))
+		return (FAILURE);
+	if (ft_isalnum(arg[i]) == FALSE)
 	{
 		proper_arg[0] = ft_charjoin(proper_arg[0], '$');
 		return (SUCCESS);
@@ -50,16 +52,41 @@ int			pass_ve(char *arg, int i)
 	return (i);
 }
 
+// void		replace_arg_cond(t_quote *q, int *i, char *arg, char **proper_arg)
+// {
+// 	if (arg[i[0]] == '\\' && is_even(q->singl) == FALSE)
+// 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
+// 	else if (arg[i[0]] == '\\' && (is_even(q->singl) == FALSE ||
+// 	(!is_even(q->doubl) && is_char(arg[i[0] + 1], "\"")))
+// 	&& arg[*i + 1] != '\\')
+// 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
+// 	else if (arg[i[0]] == '\\')
+// 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[++i[0]]);
+// 	else if (arg[i[0]] == '\'' && is_even(q->doubl))
+// 		q->singl++;
+// 	else if (arg[i[0]] == '\"' && is_even(q->singl))
+// 		q->doubl++;
+// 	else if (arg[i[0]] == '$' && is_even(q->singl) && arg[(*i) + 1])
+// 	{
+// 		get_ve_value(proper_arg, arg, i[0] + 1, q);
+// 		i[0] = pass_ve(arg, i[0]) - 1;
+// 	}
+// 	else
+// 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
+// }
+
 void		replace_arg_cond(t_quote *q, int *i, char *arg, char **proper_arg)
 {
-	if (arg[i[0]] == '\\' && is_even(q->singl) == FALSE)
+	if (arg[i[0]] == '\\' && is_even(q->doubl) && is_even(q->singl))
+	{
+		i[0]++;
 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
-	else if (arg[i[0]] == '\\' && (is_even(q->singl) == FALSE ||
-	(!is_even(q->doubl) && is_char(arg[i[0] + 1], "\"")))
-	&& arg[*i + 1] != '\\')
+	}
+	else if (arg[i[0]] == '\\' && !is_even(q->doubl) && is_char(arg[i[0] + 1], "\"$\\"))
+	{
+		i[0]++;
 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
-	else if (arg[i[0]] == '\\')
-		proper_arg[0] = ft_charjoin(proper_arg[0], arg[++i[0]]);
+	}
 	else if (arg[i[0]] == '\'' && is_even(q->doubl))
 		q->singl++;
 	else if (arg[i[0]] == '\"' && is_even(q->singl))
@@ -67,7 +94,7 @@ void		replace_arg_cond(t_quote *q, int *i, char *arg, char **proper_arg)
 	else if (arg[i[0]] == '$' && is_even(q->singl) && arg[(*i) + 1])
 	{
 		get_ve_value(proper_arg, arg, i[0] + 1, q);
-		i[0] = pass_ve(arg, i[0]) - 1;
+		i[0] = pass_ve(arg, i[0]) - 1;		
 	}
 	else
 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
@@ -124,5 +151,5 @@ char		**get_proper_arg(char **arg_tab)
 **
 ** echo $'' --> rien
 ** echo "$''" --> $''
-** peu de gens ont géré ça
+**
 */

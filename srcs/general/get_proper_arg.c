@@ -131,6 +131,51 @@ char		*replace_arg(char *arg)
 	return (proper_arg);
 }
 
+int			arrange_tab(char ***arg_tab, int j)
+{
+	int		i;
+	char	**new_arg_tab;
+
+	i = 0;
+	while (arg_tab[0][i] != NULL)
+		i++;
+	if (!(new_arg_tab = malloc(sizeof(new_arg_tab) * (i))))
+		return (FAILURE);
+	i = 0;
+	while (arg_tab[0][i] && i < j)
+	{
+		new_arg_tab[i] = ft_strdup(arg_tab[0][i]);
+		i++;
+	}
+	j++;
+	while (arg_tab[0][j])
+	{
+		new_arg_tab[i] = ft_strdup(arg_tab[0][j]);
+		i++;
+		j++;
+	}
+	new_arg_tab[i] = NULL;
+	free_tab(arg_tab[0]);
+	arg_tab[0] = new_arg_tab;
+	return (SUCCESS);
+}
+
+int			is_wrong_ve(char *job)
+{
+	int		i;
+
+	i = 0;
+	if (job[i] != '$' && !ft_isalpha(job[i + 1]))
+		return (FALSE);
+	i++;
+	while (job[i] && ft_isalnum(job[i]))
+		i++;
+	// printf("%s\n", &job[1]);
+	if (job[i] == '\0' && ft_search(&job[1]) == NULL)
+		return (TRUE);
+	return (FALSE);
+}
+
 char		**get_proper_arg(char **arg_tab)
 {
 	int		j;
@@ -141,10 +186,20 @@ char		**get_proper_arg(char **arg_tab)
 	{
 		if (is_replace(arg_tab[j]) == TRUE)
 		{
-			proper_arg = replace_arg(arg_tab[j]);
-			free(arg_tab[j]);
-			// printf("prop_arg = %s\n", proper_arg);
-			arg_tab[j] = proper_arg;
+			if (is_wrong_ve(arg_tab[j]))
+			{
+				arrange_tab(&arg_tab, j);
+				// print_strs(arg_tab);
+				// printf("\ncheck\n");
+				j = j - 1;
+			}
+			else
+			{
+				proper_arg = replace_arg(arg_tab[j]);
+				free(arg_tab[j]);
+				// printf("prop_arg = %s\n", proper_arg);
+				arg_tab[j] = proper_arg;
+			}
 		}
 		j++;
 	}

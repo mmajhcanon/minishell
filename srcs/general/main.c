@@ -45,9 +45,9 @@ int			check_exceptions(char *line, int type, int exit)
 		else if (is_double_redirect(command_tab[i]) >
 				is_single_redirect(command_tab[i], '>'))
 			exit = double_redirect(command_tab[i]);
-		else if (type != 2 && is_single_redirect(command_tab[i], '>') > 0)
+		else if (type != 2 && is_single_redirect(command_tab[i], '>') >= 0)
 			exit = redirect_sup(command_tab[i], type);
-		else if (is_single_redirect(command_tab[i], '<') > 0)
+		else if (is_single_redirect(command_tab[i], '<') >= 0)
 			exit = redirect_inf(command_tab[i]);
 		else
 			exit = find_job(command_tab[i]);

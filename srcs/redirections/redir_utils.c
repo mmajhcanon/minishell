@@ -21,7 +21,7 @@ int		is_double_redirect(char *command)
 	quote.singl = 0;
 	quote.doubl = 0;
 	i = 0;
-	j = 0;
+	j = -1;
 	while (command[i])
 	{
 		if (command[i] == '\'')
@@ -46,7 +46,7 @@ int		is_single_redirect(char *command, char c)
 	quote.singl = 0;
 	quote.doubl = 0;
 	i = 0;
-	j = 0;
+	j = -1;
 	while (command[i])
 	{
 		if (command[i] == '\'')

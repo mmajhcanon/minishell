@@ -20,6 +20,7 @@ int			get_ve_value(char **proper_arg, char *arg, int i, t_quote *q)
 	int		j;
 
 	j = 0;
+	
 	if (arg[i] == '?')
 		return (special_var(proper_arg));
 	if (arg[i] == '\'' && is_even(q->doubl))
@@ -34,6 +35,11 @@ int			get_ve_value(char **proper_arg, char *arg, int i, t_quote *q)
 	while (arg[i] && is_char(arg[i], "\\\'\"$ ") == FALSE)
 		str_name[j++] = arg[i++];
 	str_name[j] = '\0';
+	if (ft_search(str_name) == NULL)
+	{
+		free(str_name);
+		return (FAILURE);
+	}
 	tmp = ft_strjoin(*proper_arg, ft_search(str_name));
 	free(str_name);
 	save = *proper_arg;
@@ -137,6 +143,7 @@ char		**get_proper_arg(char **arg_tab)
 		{
 			proper_arg = replace_arg(arg_tab[j]);
 			free(arg_tab[j]);
+			// printf("prop_arg = %s\n", proper_arg);
 			arg_tab[j] = proper_arg;
 		}
 		j++;

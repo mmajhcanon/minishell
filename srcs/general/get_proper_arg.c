@@ -165,12 +165,14 @@ int			is_wrong_ve(char *job)
 	int		i;
 
 	i = 0;
+	if (job[i] == '$' && job[i + 1] == '\0')
+		return (FALSE);
+	// printf("test %s\n", &job[1]);
 	if (job[i] != '$' && !ft_isalpha(job[i + 1]))
 		return (FALSE);
 	i++;
 	while (job[i] && ft_isalnum(job[i]))
 		i++;
-	// printf("%s\n", &job[1]);
 	if (job[i] == '\0' && ft_search(&job[1]) == NULL)
 		return (TRUE);
 	return (FALSE);

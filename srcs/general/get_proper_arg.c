@@ -12,15 +12,30 @@
 
 #include "minishell.h"
 
+int			ve_value_free(char *str_name, char **prop_arg)
+{
+	char	*tmp;
+	char	*save;
+
+	if (ft_search(str_name) == NULL)
+	{
+		free(str_name);
+		return (FAILURE);
+	}
+	tmp = ft_strjoin(*prop_arg, ft_search(str_name));
+	free(str_name);
+	save = *prop_arg;
+	*prop_arg = tmp;
+	free(save);
+	return (SUCCESS);
+}
+
 int			get_ve_value(char **proper_arg, char *arg, int i, t_quote *q)
 {
 	char	*str_name;
-	char	*tmp;
-	char	*save;
 	int		j;
 
 	j = 0;
-	
 	if (arg[i] == '?')
 		return (special_var(proper_arg));
 	if (arg[i] == '\'' && is_even(q->doubl))
@@ -35,16 +50,8 @@ int			get_ve_value(char **proper_arg, char *arg, int i, t_quote *q)
 	while (arg[i] && is_char(arg[i], "\\\'\"$ ") == FALSE)
 		str_name[j++] = arg[i++];
 	str_name[j] = '\0';
-	if (ft_search(str_name) == NULL)
-	{
-		free(str_name);
+	if (ve_value_free(str_name, proper_arg) == FAILURE)
 		return (FAILURE);
-	}
-	tmp = ft_strjoin(*proper_arg, ft_search(str_name));
-	free(str_name);
-	save = *proper_arg;
-	*proper_arg = tmp;
-	free(save);
 	return (SUCCESS);
 }
 
@@ -58,29 +65,6 @@ int			pass_ve(char *arg, int i)
 	return (i);
 }
 
-// void		replace_arg_cond(t_quote *q, int *i, char *arg, char **proper_arg)
-// {
-// 	if (arg[i[0]] == '\\' && is_even(q->singl) == FALSE)
-// 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
-// 	else if (arg[i[0]] == '\\' && (is_even(q->singl) == FALSE ||
-// 	(!is_even(q->doubl) && is_char(arg[i[0] + 1], "\"")))
-// 	&& arg[*i + 1] != '\\')
-// 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
-// 	else if (arg[i[0]] == '\\')
-// 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[++i[0]]);
-// 	else if (arg[i[0]] == '\'' && is_even(q->doubl))
-// 		q->singl++;
-// 	else if (arg[i[0]] == '\"' && is_even(q->singl))
-// 		q->doubl++;
-// 	else if (arg[i[0]] == '$' && is_even(q->singl) && arg[(*i) + 1])
-// 	{
-// 		get_ve_value(proper_arg, arg, i[0] + 1, q);
-// 		i[0] = pass_ve(arg, i[0]) - 1;
-// 	}
-// 	else
-// 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
-// }
-
 void		replace_arg_cond(t_quote *q, int *i, char *arg, char **proper_arg)
 {
 	if (arg[i[0]] == '\\' && is_even(q->doubl) && is_even(q->singl))
@@ -88,7 +72,8 @@ void		replace_arg_cond(t_quote *q, int *i, char *arg, char **proper_arg)
 		i[0]++;
 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
 	}
-	else if (arg[i[0]] == '\\' && !is_even(q->doubl) && is_char(arg[i[0] + 1], "\"$\\"))
+	else if (arg[i[0]] == '\\'
+	&& !is_even(q->doubl) && is_char(arg[i[0] + 1], "\"$\\"))
 	{
 		i[0]++;
 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
@@ -100,7 +85,7 @@ void		replace_arg_cond(t_quote *q, int *i, char *arg, char **proper_arg)
 	else if (arg[i[0]] == '$' && is_even(q->singl) && arg[(*i) + 1])
 	{
 		get_ve_value(proper_arg, arg, i[0] + 1, q);
-		i[0] = pass_ve(arg, i[0]) - 1;		
+		i[0] = pass_ve(arg, i[0]) - 1;
 	}
 	else
 		proper_arg[0] = ft_charjoin(proper_arg[0], arg[i[0]]);
@@ -167,7 +152,6 @@ int			is_wrong_ve(char *job)
 	i = 0;
 	if (job[i] == '$' && job[i + 1] == '\0')
 		return (FALSE);
-	// printf("test %s\n", &job[1]);
 	if (job[i] != '$' && !ft_isalpha(job[i + 1]))
 		return (FALSE);
 	i++;
@@ -191,15 +175,12 @@ char		**get_proper_arg(char **arg_tab)
 			if (is_wrong_ve(arg_tab[j]))
 			{
 				arrange_tab(&arg_tab, j);
-				// print_strs(arg_tab);
-				// printf("\ncheck\n");
 				j = j - 1;
 			}
 			else
 			{
 				proper_arg = replace_arg(arg_tab[j]);
 				free(arg_tab[j]);
-				// printf("prop_arg = %s\n", proper_arg);
 				arg_tab[j] = proper_arg;
 			}
 		}
@@ -207,13 +188,3 @@ char		**get_proper_arg(char **arg_tab)
 	}
 	return (arg_tab);
 }
-
-/*
-** l'arg peut etre sans "" ou ''
-** s'il y a un seul " ou ' il se termine forcément
-**
-**
-** echo $'' --> rien
-** echo "$''" --> $''
-**
-*/

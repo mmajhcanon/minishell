@@ -51,18 +51,21 @@ int		get_new_var(char *arg, char **var)
 {
 	int		i;
 
-	i = 0;
-	if (ft_isdigit(arg[i]) || is_char(arg[i], "\"\\\';") || arg[i] == '\0')
+	i = -1;
+	if (ft_isdigit(arg[0]) || is_char(arg[0], " \"\\\';") || arg[0] == '\0')
 	{
 		bad_identifier(arg, var[0]);
 		return (FAILURE);
 	}
-	while (arg[i] && is_char(arg[i], "\"\\\';") == FALSE)
-	{
+	while (arg[++i] && is_char(arg[i], " \"\\\';=") == FALSE)
 		var[0][i] = arg[i];
-		i++;
-	}
-	if (is_char(arg[i], "\"\\\';") == TRUE)
+	if (arg[i] && arg[i] == '=')
+		while (arg[i])
+		{
+			var[0][i] = arg[i];
+			i++;
+		}
+	if (is_char(arg[i], " \"\\\';") == TRUE)
 	{
 		bad_identifier(arg, var[0]);
 		return (FAILURE);
@@ -85,9 +88,7 @@ int		add_var(char *arg, char ***env)
 	if (get_new_var(arg, &var) == FAILURE)
 		return (FAILURE);
 	if (is_export(env[0], var) != FAILURE)
-	{
 		ft_replace_var(env, var);
-	}
 	else
 	{
 		env[0] = ft_add_tabstrdup(env[0], var);

@@ -84,6 +84,8 @@ int		check_bins(char **arg_tab)
 			return (is_executable(bin_path, f, arg_tab));
 		}
 	}
+	if (path)
+		free_tab(path);
 	return (0);
 }
 

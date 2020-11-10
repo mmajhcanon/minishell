@@ -53,8 +53,9 @@ int		is_single_redirect(char *command, char c)
 			quote.singl++;
 		if (command[i] == '\"')
 			quote.doubl++;
-		if (command[i] == c && is_even(quote.singl) == TRUE &&
-				is_even(quote.doubl) == TRUE && command[i + 1] != c &&
+		if (command[i] == c &&
+		is_even(quote.singl) == TRUE && is_even(quote.doubl) == TRUE &&
+		command[i + 1] != c && command[i - 1] != c &&
 				(i == 0 || (i >= 1 && command[i - 1] != '\\')))
 			j = i;
 		i++;

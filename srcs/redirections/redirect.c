@@ -19,7 +19,8 @@ void	free_redirect_sup(char **arg_tab, int *fd)
 	free_tab(arg_tab);
 	j = -1;
 	while (fd && fd[++j])
-		close(fd[j]);
+		j = j;
+	close(fd[j - 1]);
 	if (fd)
 		free(fd);
 }

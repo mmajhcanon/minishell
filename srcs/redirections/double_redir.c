@@ -37,12 +37,15 @@ int		*initialize_fdd(char ***arg_tab, int i, int j)
 	while (i-- > 1)
 	{
 		tmp = (*arg_tab)[j + 1];
-		if (!(fd[j] = open(tmp, O_CREAT | O_RDWR | O_APPEND, 0666)))
+		if (tmp[0] == '\0' ||
+			!(fd[j] = open(tmp, O_CREAT | O_RDWR | O_APPEND, 0666)))
 		{
 			free(fd);
 			return (NULL);
 		}
 		j++;
+		if (i - 1 > 1)
+			close(fd[j]);
 	}
 	fd[j] = 0;
 	return (fd);
@@ -96,8 +99,9 @@ int		double_redirect(char *str)
 	arg_tab = copy_stringd(str);
 	if ((fd = initialize_fdd(&arg_tab, 0, 0)) == NULL)
 	{
+		ft_putstr_fd("msh: ambiguous redirection\n", 2);
 		free_tab(arg_tab);
-		g_quit = 126;
+		g_quit = 1;
 		return (FALSE);
 	}
 	while (fd[i])

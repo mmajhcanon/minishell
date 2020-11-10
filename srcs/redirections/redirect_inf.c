@@ -65,6 +65,7 @@ int		exec_inf(char **tab, char *command)
 	int		fd;
 
 	i = -1;
+	fd = 0;
 	while (tab[++i])
 	{
 		if (fd)

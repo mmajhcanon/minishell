@@ -60,6 +60,38 @@ int		*initialize_fd(char ***arg_tab, int i, int j)
 	return (fd);
 }
 
+void	change_arg(char **arg_tab, int j, int k)
+{
+	char	**tab;
+	char	*str;
+	int		i;
+
+	i = j;
+	while (arg_tab[++i] != 0)
+	{
+		str = ft_strdup("");
+		tab = ft_split(arg_tab[i], ' ');
+		tab = get_proper_arg(tab, 1);
+		j = -1;
+		while (tab[++j] != 0)
+		{
+			k = -1;
+			if (j == 0)
+				while (tab[j][++k] != '\0')
+					str = ft_charjoin(str, tab[j][k]);
+			else
+			{
+				arg_tab[0] = ft_charjoin(arg_tab[0], ' ');
+				while (tab[j][++k] != '\0')
+				arg_tab[0] = ft_charjoin(arg_tab[0], tab[j][k]);
+			}	
+		}
+		free(arg_tab[i]);
+		arg_tab[i] = str;
+		free_tab(tab);
+	}
+}
+
 char	**copy_string(char *str)
 {
 	char	*line;
@@ -72,9 +104,7 @@ char	**copy_string(char *str)
 		line = ft_charjoin(line, str[i]);
 	arg_tab = ft_split(line, '>');
 	free(line);
-	arg_tab += 8;
-	arg_tab = get_proper_arg(arg_tab);
-	arg_tab -= 8;
+	change_arg(arg_tab, 0, 0);
 	return (arg_tab);
 }
 
@@ -90,8 +120,9 @@ int		redirect_sup(char *str, int type)
 	arg_tab = copy_string(str);
 	if ((fd = initialize_fd(&arg_tab, 0, 0)) == NULL)
 	{
+		ft_putstr_fd("msh: ambiguous redirection\n", 2);
 		free_tab(arg_tab);
-		g_quit = 126;
+		g_quit = 1;
 		return (FALSE);
 	}
 	while (fd[j])

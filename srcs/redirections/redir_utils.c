@@ -65,19 +65,9 @@ int		is_single_redirect(char *command, char c)
 int		open_fd(char ***arg_tab, int *fd, int j)
 {
 	char	*tmp;
-	int		k;
 
-	k = 0;
-	tmp = ft_strtrim((*arg_tab)[j + 1], " ");
-	while (tmp[k] != '\0' && tmp[k] != ' ')
-		k++;
-	if (tmp[k])
-	{
-		tmp[k] = '\0';
-		while (tmp[++k])
-			*arg_tab[0] = ft_charjoin((*arg_tab)[0], tmp[k]);
-	}
-	if (!(fd[j] = open(tmp, O_CREAT | O_RDWR | O_TRUNC, 0666)))
+	tmp = ft_strdup((*arg_tab)[j + 1]);
+	if (tmp[0] == '\0' || !(fd[j] = open(tmp, O_CREAT | O_RDWR | O_TRUNC, 0666)))
 	{
 		free(fd);
 		free(tmp);
@@ -111,6 +101,7 @@ char	**tab_creator_double(char **arg_tab, char *line, t_quote quote)
 	}
 	free(line);
 	arg_tab[j] = 0;
+	change_arg(arg_tab, 0, 0);
 	return (arg_tab);
 }
 
@@ -136,5 +127,6 @@ char	**tab_creator_inf(char **tab, char *line, t_quote quote, char **command)
 			break ;
 	}
 	tab[j] = 0;
+	change_arg(tab, -1, 0);
 	return (tab);
 }

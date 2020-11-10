@@ -114,7 +114,7 @@ int		find_job(char *line)
 	char		**arg_tab;
 
 	arg_tab = ft_split(line, ' ');
-	arg_tab = get_proper_arg(arg_tab);
+	arg_tab = get_proper_arg(arg_tab, 0);
 	if (arg_tab[0] == NULL)
 		return (1);
 	if ((is_builtin = compute_line(arg_tab)) > 0 ||

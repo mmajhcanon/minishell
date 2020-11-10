@@ -162,7 +162,7 @@ int			is_wrong_ve(char *job)
 	return (FALSE);
 }
 
-char		**get_proper_arg(char **arg_tab)
+char		**get_proper_arg(char **arg_tab, int i)
 {
 	int		j;
 	char	*proper_arg;
@@ -172,11 +172,8 @@ char		**get_proper_arg(char **arg_tab)
 	{
 		if (is_replace(arg_tab[j]) == TRUE)
 		{
-			if (is_wrong_ve(arg_tab[j]))
-			{
-				arrange_tab(&arg_tab, j);
-				j = j - 1;
-			}
+			if (is_wrong_ve(arg_tab[j]) && i == 0)
+				arrange_tab(&arg_tab, j--);
 			else
 			{
 				proper_arg = replace_arg(arg_tab[j]);

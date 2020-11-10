@@ -27,7 +27,8 @@ SRCS_GEN		=	srcs/general/main.c					\
 					srcs/general/exec.c					\
 					srcs/general/functions.c			\
 					srcs/general/other_functions.c 		\
-					srcs/general/get_proper_arg.c
+					srcs/general/get_proper_arg.c		\
+					srcs/general/get_proper_utils.c
 SRCS_BUILD		=	srcs/builds/echo.c					\
 					srcs/builds/env.c					\
 					srcs/builds/direction.c				\

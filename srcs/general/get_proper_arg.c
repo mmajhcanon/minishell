@@ -12,59 +12,6 @@
 
 #include "minishell.h"
 
-int			ve_value_free(char *str_name, char **prop_arg)
-{
-	char	*tmp;
-	char	*save;
-
-	if (ft_search(str_name) == NULL)
-	{
-		free(str_name);
-		return (FAILURE);
-	}
-	tmp = ft_strjoin(*prop_arg, ft_search(str_name));
-	free(str_name);
-	save = *prop_arg;
-	*prop_arg = tmp;
-	free(save);
-	return (SUCCESS);
-}
-
-int			get_ve_value(char **proper_arg, char *arg, int i, t_quote *q)
-{
-	char	*str_name;
-	int		j;
-
-	j = 0;
-	if (arg[i] == '?')
-		return (special_var(proper_arg));
-	if (arg[i] == '\'' && is_even(q->doubl))
-		return (FAILURE);
-	if (ft_isalnum(arg[i]) == FALSE)
-	{
-		proper_arg[0] = ft_charjoin(proper_arg[0], '$');
-		return (SUCCESS);
-	}
-	if (!(str_name = malloc(sizeof(char) * ft_strlen(arg) + 1)))
-		return (FAILURE);
-	while (arg[i] && is_char(arg[i], "\\\'\"$ ") == FALSE)
-		str_name[j++] = arg[i++];
-	str_name[j] = '\0';
-	if (ve_value_free(str_name, proper_arg) == FAILURE)
-		return (FAILURE);
-	return (SUCCESS);
-}
-
-int			pass_ve(char *arg, int i)
-{
-	i++;
-	if (is_char(arg[i], "0123456789") == TRUE)
-		return (++i);
-	while (arg[i] && is_char(arg[i], "\\\'\"$/ ") == FALSE)
-		i++;
-	return (i);
-}
-
 void		replace_arg_cond(t_quote *q, int *i, char *arg, char **proper_arg)
 {
 	if (arg[i[0]] == '\\' && is_even(q->doubl) && is_even(q->singl))

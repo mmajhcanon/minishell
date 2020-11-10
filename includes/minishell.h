@@ -127,6 +127,9 @@ int				is_bad_char(char c);
 int				is_equal(char *str);
 int				print_exported_var(char **alloc_env);
 int				open_fd(char ***arg_tab, int *fd, int j);
+int				ve_value_free(char *str_name, char **prop_arg);
+int				get_ve_value(char **proper_arg, char *arg, int i, t_quote *q);
+int				pass_ve(char *arg, int i);
 
 char			**g_env;
 int				g_quit;

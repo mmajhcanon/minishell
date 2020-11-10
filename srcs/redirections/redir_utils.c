@@ -67,7 +67,8 @@ int		open_fd(char ***arg_tab, int *fd, int j)
 	char	*tmp;
 
 	tmp = ft_strdup((*arg_tab)[j + 1]);
-	if (tmp[0] == '\0' || !(fd[j] = open(tmp, O_CREAT | O_RDWR | O_TRUNC, 0666)))
+	if (tmp[0] == '\0' ||
+		!(fd[j] = open(tmp, O_CREAT | O_RDWR | O_TRUNC, 0666)))
 	{
 		free(fd);
 		free(tmp);
